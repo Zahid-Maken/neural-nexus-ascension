@@ -89,8 +89,8 @@ const GameContainer: React.FC = () => {
     
     toast({
       title: "Game Saved",
-      description: `Progress saved at ${new Date().toLocaleTimeString()}`,
-      duration: 2000,
+      description: "",
+      duration: 4000,
     });
   };
 
@@ -113,6 +113,7 @@ const GameContainer: React.FC = () => {
         toast({
           title: "Level Up!",
           description: "You've advanced to Level 2 - Algorithmic Learning",
+          duration: 4000,
         });
         setLevel(2);
         addStory("Alex: \"That's strange... I don't remember adding these loop structures to my code. Must be tired.\"");
@@ -155,9 +156,9 @@ const GameContainer: React.FC = () => {
           </Button>
         </div>
         
-        <main className={`flex flex-1 overflow-hidden ${isMobile ? 'flex-col' : ''}`}>
+        <main className="flex flex-1 overflow-hidden h-[calc(100vh-52px)]">
           {/* Level Info on the left */}
-          <div className={`${isMobile ? 'w-full' : 'w-1/4 max-w-xs'} p-4 bg-gray-900`}>
+          <div className={`${isMobile ? 'w-full' : 'w-1/4 max-w-xs'} p-4 bg-gray-900 overflow-y-auto`}>
             <LevelInfo />
 
             {/* Upgrade button at bottom of sidebar */}
@@ -176,9 +177,9 @@ const GameContainer: React.FC = () => {
             </div>
           </div>
           
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 h-full overflow-hidden">
             {/* Neural Network takes most of the space */}
-            <div className={`flex-1 p-4 flex items-center justify-center ${isMobile ? 'h-[50vh]' : ''}`}>
+            <div className="flex-1 p-4 flex items-center justify-center overflow-hidden">
               <NeuralNetwork />
             </div>
             

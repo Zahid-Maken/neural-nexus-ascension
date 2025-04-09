@@ -226,7 +226,7 @@ const NeuralNetwork: React.FC = () => {
     switch(level) {
       case 1:
         return (
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full overflow-hidden">
             {bits.map(bit => (
               <div
                 key={bit.id}
