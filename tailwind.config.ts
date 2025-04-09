@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Game specific colors
+				'neural-dark': '#0A192F',
+				'neural-blue': '#112240',
+				'neural-cyan': '#64FFDA',
+				'neural-green': '#00FF41',
+				'neural-gray': '#8892B0',
+				'neural-light': '#CCD6F6',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +92,46 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						opacity: '0.6',
+						boxShadow: '0 0 5px rgba(100, 255, 218, 0.5)' 
+					},
+					'50%': { 
+						opacity: '1',
+						boxShadow: '0 0 15px rgba(100, 255, 218, 0.8)' 
+					}
+				},
+				'data-flow': {
+					'0%': { 
+						transform: 'translateX(0) translateY(0)',
+						opacity: '0' 
+					},
+					'50%': { 
+						opacity: '1' 
+					},
+					'100%': { 
+						transform: 'translateX(100%) translateY(0)',
+						opacity: '0' 
+					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'data-flow': 'data-flow 3s linear infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'fade-in': 'fade-in 1s ease-out'
 			}
 		}
 	},

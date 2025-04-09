@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +90,49 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neural-dark text-neural-light;
+  }
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+}
+
+@layer components {
+  .neural-node {
+    @apply relative w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300;
+  }
+  
+  .neural-node::before {
+    @apply content-[''] absolute w-full h-full rounded-full bg-neural-cyan bg-opacity-20 animate-pulse-glow;
+  }
+  
+  .neural-node::after {
+    @apply content-[''] absolute w-8 h-8 rounded-full border border-neural-cyan;
+  }
+  
+  .neural-connection {
+    @apply absolute h-1 bg-neural-cyan opacity-70 transform origin-left;
+  }
+  
+  .neural-connection::before {
+    @apply content-[''] absolute h-1 w-2 bg-neural-cyan rounded-full animate-data-flow;
+  }
+  
+  .story-panel {
+    @apply p-4 bg-neural-blue bg-opacity-80 rounded-md border border-neural-gray border-opacity-30 text-neural-light;
+  }
+  
+  .code-text {
+    @apply font-mono text-neural-green;
+  }
+  
+  .resource-counter {
+    @apply flex items-center gap-2 text-neural-cyan font-semibold;
+  }
+  
+  .glow-hover {
+    @apply transition-all duration-300 hover:text-neural-cyan hover:shadow-[0_0_8px_rgba(100,255,218,0.8)];
   }
 }
