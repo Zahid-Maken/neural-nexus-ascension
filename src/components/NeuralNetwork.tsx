@@ -1,7 +1,6 @@
-
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { GameContext } from './GameContainer';
-import { Check, X, RotateCw, Code } from 'lucide-react';
+import { Check, X, RotateCw, Code, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface BinaryBit {
@@ -95,7 +94,6 @@ const NeuralNetwork: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lastBitTime, setLastBitTime] = useState(Date.now());
   
-  // Level 2 state
   const [currentChallenge, setCurrentChallenge] = useState<LoopChallenge | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -124,7 +122,6 @@ const NeuralNetwork: React.FC = () => {
     setLastBitTime(Date.now());
   };
   
-  // Initialize bits for level 1 and set up challenge for level 2
   useEffect(() => {
     if (level === 1) {
       for (let i = 0; i < 10; i++) {
@@ -137,17 +134,14 @@ const NeuralNetwork: React.FC = () => {
       
       return () => clearInterval(interval);
     } else if (level === 2 && !currentChallenge) {
-      // Filter out completed challenges
       const availableChallenges = loopChallenges.filter(
         challenge => !completedChallenges.includes(challenge.id)
       );
       
       if (availableChallenges.length > 0) {
-        // Select a random challenge from available ones
         const randomIndex = Math.floor(Math.random() * availableChallenges.length);
         setCurrentChallenge(availableChallenges[randomIndex]);
       } else if (loopChallenges.length > 0) {
-        // If all challenges completed, reset and start over
         setCompletedChallenges([]);
         setCurrentChallenge(loopChallenges[0]);
       }
@@ -178,7 +172,6 @@ const NeuralNetwork: React.FC = () => {
       setShowResult(true);
       
       if (selectedAnswer === currentChallenge.correctAnswer) {
-        // Reward CP for correct answer
         addCP(10);
         
         setTimeout(() => {
@@ -190,31 +183,24 @@ const NeuralNetwork: React.FC = () => {
   
   const nextChallenge = () => {
     if (currentChallenge) {
-      // Add current challenge to completed list
       setCompletedChallenges(prev => [...prev, currentChallenge.id]);
     }
     
-    // Reset state for next challenge
     setSelectedAnswer(null);
     setShowResult(false);
     setChallengeComplete(false);
     
-    // Filter out completed challenges
     const availableChallenges = loopChallenges.filter(
       challenge => !completedChallenges.includes(challenge.id) && 
       (!currentChallenge || challenge.id !== currentChallenge.id)
     );
     
     if (availableChallenges.length > 0) {
-      // Select a random challenge from available ones
       const randomIndex = Math.floor(Math.random() * availableChallenges.length);
       setCurrentChallenge(availableChallenges[randomIndex]);
     } else {
-      // If all challenges completed, trigger level up logic if we have enough CP
       if (resources.cp >= 300) {
-        // Level up is handled in GameContainer
       } else {
-        // Reset challenges and start over
         setCompletedChallenges([]);
         const randomIndex = Math.floor(Math.random() * loopChallenges.length);
         setCurrentChallenge(loopChallenges[randomIndex]);
@@ -230,7 +216,7 @@ const NeuralNetwork: React.FC = () => {
             {bits.map(bit => (
               <div
                 key={bit.id}
-                className={`absolute font-mono text-lg cursor-pointer transition-all 
+                className={`absolute font-mono text-2xl cursor-pointer transition-all 
                   ${bit.clicked 
                     ? 'opacity-20 scale-125' 
                     : 'opacity-100 hover:scale-110 animate-pulse'} 
@@ -238,6 +224,7 @@ const NeuralNetwork: React.FC = () => {
                 style={{
                   left: `${bit.x}px`,
                   top: `${bit.y}px`,
+                  transform: 'translate(-50%, -50%)',
                   textShadow: bit.value === '1' 
                     ? '0 0 10px rgba(0, 255, 0, 0.7)' 
                     : '0 0 10px rgba(255, 255, 255, 0.7)'

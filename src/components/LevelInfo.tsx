@@ -14,14 +14,14 @@ const levelData = [
     level: 1,
     name: "Neural Foundations",
     description: "Establish basic neural pathways to form a functional network.",
-    icon: <Atom className="w-5 h-5 text-neural-cyan" />,
+    icon: <Atom className="w-4 h-4 text-neural-cyan" />,
     requiredCP: 100
   },
   {
     level: 2,
     name: "Algorithmic Learning",
     description: "Create loop structures to enable self-improvement.",
-    icon: <Code className="w-5 h-5 text-neural-cyan" />,
+    icon: <Code className="w-4 h-4 text-neural-cyan" />,
     requiredCP: 300
   },
   {
@@ -59,12 +59,12 @@ const LevelInfo: React.FC = () => {
     : 100;
 
   return (
-    <div className="space-y-4">
-      <div className="p-4 bg-gray-900 rounded-md border border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+    <div className="space-y-3">
+      <div className="p-3 bg-gray-900 rounded-md border border-gray-700">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-1">
             {currentLevelData.icon}
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-base font-semibold text-white ml-1">
               Level {level}: {currentLevelData.name}
             </h2>
           </div>
@@ -72,7 +72,7 @@ const LevelInfo: React.FC = () => {
           <Popover>
             <PopoverTrigger asChild>
               <button className="text-gray-400 hover:text-white">
-                <Info className="w-5 h-5" />
+                <Info className="w-4 h-4" />
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-80 bg-gray-800 border-gray-700 text-white">
@@ -111,23 +111,23 @@ const LevelInfo: React.FC = () => {
           </Popover>
         </div>
         
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-xs text-gray-400 mb-2">
           {currentLevelData.description}
         </p>
         
         {level === 2 && (
-          <div className="my-2 text-xs text-neural-cyan">
+          <div className="my-1 text-xs text-neural-cyan">
             <span className="block">Create loop structures to enable self-improvement.</span>
           </div>
         )}
         
         {nextLevelData && (
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div className="flex justify-between text-xs">
               <span className="text-white">Progress to Level {level + 1}</span>
               <span className="text-white">{Math.floor(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2 bg-gray-800" />
+            <Progress value={progress} className="h-1.5 bg-gray-800" />
             <div className="text-xs text-gray-400 text-right">
               {resources.cp}/{nextLevelData.requiredCP} CP
             </div>

@@ -5,7 +5,7 @@ import ResourceDashboard from './ResourceDashboard';
 import UpgradePanel from './UpgradePanel';
 import StoryPanel from './StoryPanel';
 import LevelInfo from './LevelInfo';
-import { Settings, Save } from 'lucide-react';
+import { Settings, Save, Info } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -141,9 +141,9 @@ const GameContainer: React.FC = () => {
         saveGame
       }}
     >
-      <div className="flex flex-col w-full min-h-screen bg-black text-white">
+      <div className="flex flex-col w-full h-screen bg-black text-white overflow-hidden">
         {/* Resource Dashboard at the top */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center bg-gray-900 border-b border-gray-800">
           <ResourceDashboard />
           <Button 
             variant="ghost" 
@@ -158,15 +158,15 @@ const GameContainer: React.FC = () => {
         
         <main className="flex flex-1 overflow-hidden h-[calc(100vh-52px)]">
           {/* Level Info on the left */}
-          <div className={`${isMobile ? 'w-full' : 'w-1/4 max-w-xs'} p-4 bg-gray-900 overflow-y-auto`}>
+          <div className={`${isMobile ? 'hidden' : 'w-1/5 max-w-[220px]'} py-2 px-2 bg-gray-900 overflow-y-auto border-r border-gray-800`}>
             <LevelInfo />
 
             {/* Upgrade button at bottom of sidebar */}
-            <div className="mt-4">
+            <div className="mt-3">
               <Sheet>
                 <SheetTrigger asChild>
                   <button className="flex items-center space-x-2 p-2 bg-gray-800 hover:bg-gray-700 rounded-md w-full">
-                    <Settings className="w-5 h-5" />
+                    <Settings className="w-4 h-4" />
                     <span>Upgrades</span>
                   </button>
                 </SheetTrigger>
@@ -177,14 +177,43 @@ const GameContainer: React.FC = () => {
             </div>
           </div>
           
+          {/* Mobile view sidebar toggle */}
+          {isMobile && (
+            <div className="absolute top-14 left-2 z-10">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button className="flex items-center justify-center w-8 h-8 bg-gray-800 rounded-md">
+                    <Info className="w-4 h-4" />
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-full max-w-xs bg-gray-900 border-gray-700 p-3">
+                  <LevelInfo />
+                  <div className="mt-4">
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <button className="flex items-center space-x-2 p-2 bg-gray-800 hover:bg-gray-700 rounded-md w-full">
+                          <Settings className="w-4 h-4" />
+                          <span>Upgrades</span>
+                        </button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="w-full max-w-md bg-gray-900 border-gray-700 p-0">
+                        <UpgradePanel />
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          )}
+          
           <div className="flex flex-col flex-1 h-full overflow-hidden">
             {/* Neural Network takes most of the space */}
-            <div className="flex-1 p-4 flex items-center justify-center overflow-hidden">
+            <div className="flex-1 p-3 flex items-center justify-center overflow-hidden">
               <NeuralNetwork />
             </div>
             
             {/* Story Panel at the bottom */}
-            <div className="p-4 bg-gray-900 border-t border-gray-800">
+            <div className="p-3 bg-gray-900 border-t border-gray-800">
               <StoryPanel />
             </div>
           </div>
