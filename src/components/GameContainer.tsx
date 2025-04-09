@@ -1,13 +1,23 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NeuralNetwork from './NeuralNetwork';
 import ResourceDashboard from './ResourceDashboard';
 import UpgradePanel from './UpgradePanel';
 import StoryPanel from './StoryPanel';
 import LevelInfo from './LevelInfo';
-import { Settings } from 'lucide-react';
+import { Settings, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
+
+// Initial game state
+const initialGameState = {
+  resources: { cp: 10, it: 0, ne: 10 },
+  level: 1,
+  storyQueue: [],
+  lastSaved: new Date().toISOString()
+};
 
 // Game context to manage global state
 export const GameContext = React.createContext<{
@@ -26,21 +36,72 @@ export const GameContext = React.createContext<{
   addCP: (amount: number) => void;
   storyQueue: string[];
   addStory: (text: string) => void;
+  saveGame: () => void;
 }>({
-  resources: { cp: 0, it: 0, ne: 0 },
-  level: 1,
+  resources: initialGameState.resources,
+  level: initialGameState.level,
   setResources: () => {},
   setLevel: () => {},
   addCP: () => {},
   storyQueue: [],
   addStory: () => {},
+  saveGame: () => {},
 });
 
 const GameContainer: React.FC = () => {
-  const [resources, setResources] = useState({ cp: 10, it: 0, ne: 10 });
-  const [level, setLevel] = useState(1);
-  const [storyQueue, setStoryQueue] = useState<string[]>([]);
+  // Load saved game from local storage or use initial state
+  const loadSavedGame = () => {
+    const saved = localStorage.getItem('neural-nexus-game');
+    if (saved) {
+      try {
+        const parsedState = JSON.parse(saved);
+        return {
+          resources: parsedState.resources || initialGameState.resources,
+          level: parsedState.level || initialGameState.level,
+          storyQueue: parsedState.storyQueue || [],
+          lastSaved: new Date().toISOString()
+        };
+      } catch (e) {
+        console.error("Error loading saved game:", e);
+        return initialGameState;
+      }
+    }
+    return initialGameState;
+  };
+
+  const savedState = loadSavedGame();
+  const [resources, setResources] = useState(savedState.resources);
+  const [level, setLevel] = useState(savedState.level);
+  const [storyQueue, setStoryQueue] = useState<string[]>(savedState.storyQueue);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
+
+  // Save game state to local storage
+  const saveGame = () => {
+    const gameState = {
+      resources,
+      level,
+      storyQueue,
+      lastSaved: new Date().toISOString()
+    };
+    
+    localStorage.setItem('neural-nexus-game', JSON.stringify(gameState));
+    
+    toast({
+      title: "Game Saved",
+      description: `Progress saved at ${new Date().toLocaleTimeString()}`,
+      duration: 2000,
+    });
+  };
+
+  // Auto-save every 30 seconds
+  useEffect(() => {
+    const autoSaveInterval = setInterval(() => {
+      saveGame();
+    }, 30000);
+    
+    return () => clearInterval(autoSaveInterval);
+  }, [resources, level, storyQueue]);
 
   // Function to add Computation Points
   const addCP = (amount: number) => {
@@ -75,16 +136,28 @@ const GameContainer: React.FC = () => {
         setLevel, 
         addCP,
         storyQueue,
-        addStory
+        addStory,
+        saveGame
       }}
     >
       <div className="flex flex-col w-full min-h-screen bg-black text-white">
         {/* Resource Dashboard at the top */}
-        <ResourceDashboard />
+        <div className="flex justify-between items-center">
+          <ResourceDashboard />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={saveGame} 
+            className="flex items-center gap-1 text-gray-400 hover:text-white mr-4"
+          >
+            <Save className="w-4 h-4" />
+            <span className="text-xs hidden sm:inline">Save</span>
+          </Button>
+        </div>
         
-        <main className="flex flex-1 overflow-hidden">
+        <main className={`flex flex-1 overflow-hidden ${isMobile ? 'flex-col' : ''}`}>
           {/* Level Info on the left */}
-          <div className="w-1/4 max-w-xs p-4 bg-gray-900">
+          <div className={`${isMobile ? 'w-full' : 'w-1/4 max-w-xs'} p-4 bg-gray-900`}>
             <LevelInfo />
 
             {/* Upgrade button at bottom of sidebar */}
@@ -96,7 +169,7 @@ const GameContainer: React.FC = () => {
                     <span>Upgrades</span>
                   </button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-full max-w-md bg-gray-900 border-gray-700 p-0">
+                <SheetContent side={isMobile ? "bottom" : "right"} className="w-full max-w-md bg-gray-900 border-gray-700 p-0">
                   <UpgradePanel />
                 </SheetContent>
               </Sheet>
@@ -105,7 +178,7 @@ const GameContainer: React.FC = () => {
           
           <div className="flex flex-col flex-1">
             {/* Neural Network takes most of the space */}
-            <div className="flex-1 p-4 flex items-center justify-center">
+            <div className={`flex-1 p-4 flex items-center justify-center ${isMobile ? 'h-[50vh]' : ''}`}>
               <NeuralNetwork />
             </div>
             

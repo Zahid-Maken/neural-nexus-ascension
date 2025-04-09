@@ -94,11 +94,15 @@ const LevelInfo: React.FC = () => {
                   <>
                     <li className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                      <span>Form closed-loop connections</span>
+                      <span>Complete loop challenges to learn programming concepts</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                      <span>Learn how loops work by building them</span>
+                      <span>Each correct answer earns you CP</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <span>Reach 300 CP to advance to Level 3</span>
                     </li>
                   </>
                 )}
@@ -110,6 +114,12 @@ const LevelInfo: React.FC = () => {
         <p className="text-sm text-gray-400 mb-4">
           {currentLevelData.description}
         </p>
+        
+        {level === 2 && (
+          <div className="my-2 text-xs text-neural-cyan">
+            <span className="block">Create loop structures to enable self-improvement.</span>
+          </div>
+        )}
         
         {nextLevelData && (
           <div className="space-y-2">
