@@ -4,7 +4,7 @@ import GameContainer from '@/components/GameContainer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-neural-dark">
+    <div className="min-h-screen bg-black">
       <GameContainer />
     </div>
   );

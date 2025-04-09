@@ -56,7 +56,7 @@ const UpgradePanel: React.FC = () => {
     }
   ]);
   
-  // Purchase upgrade
+  // Purchase upgrade logic
   const buyUpgrade = (upgradeId: string) => {
     const upgradeIndex = upgrades.findIndex(u => u.id === upgradeId);
     if (upgradeIndex === -1) return;
@@ -90,10 +90,10 @@ const UpgradePanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-neural-cyan mb-4">Upgrades</h2>
+    <div className="h-full p-6 bg-gray-900 text-white overflow-y-auto">
+      <h2 className="text-xl font-semibold text-white mb-6">Upgrades</h2>
       
-      <div className="space-y-3">
+      <div className="space-y-4">
         {upgrades.map(upgrade => {
           const canAfford = resources.cp >= upgrade.cost;
           const isMaxLevel = upgrade.level >= upgrade.maxLevel;
@@ -102,15 +102,15 @@ const UpgradePanel: React.FC = () => {
           return (
             <div 
               key={upgrade.id}
-              className={`p-3 border rounded-md transition-all ${
+              className={`p-4 border rounded-md transition-all ${
                 isUnlocked 
-                  ? 'border-neural-gray bg-neural-blue bg-opacity-30' 
-                  : 'border-gray-700 bg-gray-800 bg-opacity-30 opacity-70'
+                  ? 'border-gray-700 bg-gray-800' 
+                  : 'border-gray-800 bg-gray-900 opacity-70'
               }`}
             >
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center space-x-2">
-                  <span className="p-1 bg-neural-dark rounded-md">
+                  <span className="p-1 bg-gray-900 rounded-md">
                     {upgrade.icon}
                   </span>
                   <h3 className="font-medium">
@@ -118,25 +118,25 @@ const UpgradePanel: React.FC = () => {
                   </h3>
                 </div>
                 {isUnlocked ? (
-                  <div className="text-xs text-neural-gray">
+                  <div className="text-xs text-gray-400">
                     {upgrade.level}/{upgrade.maxLevel}
                   </div>
                 ) : (
-                  <div className="flex items-center text-xs text-neural-gray">
+                  <div className="flex items-center text-xs text-gray-400">
                     <Lock className="w-3 h-3 mr-1" />
                     <span>Level {upgrade.requiredLevel}</span>
                   </div>
                 )}
               </div>
               
-              <p className="text-xs text-neural-gray mb-2">{upgrade.description}</p>
+              <p className="text-xs text-gray-400 mb-3">{upgrade.description}</p>
               
               <Button
                 variant="outline"
                 size="sm"
                 className={`w-full ${
                   canAfford && isUnlocked && !isMaxLevel
-                    ? 'border-neural-cyan text-neural-cyan hover:bg-neural-cyan hover:bg-opacity-10'
+                    ? 'border-white text-white hover:bg-gray-700'
                     : 'opacity-70 cursor-not-allowed'
                 }`}
                 disabled={!canAfford || !isUnlocked || isMaxLevel}

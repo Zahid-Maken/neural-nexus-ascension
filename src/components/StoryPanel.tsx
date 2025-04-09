@@ -31,15 +31,14 @@ const StoryPanel: React.FC = () => {
   useEffect(() => {
     if (storyQueue.length > 0) {
       setMessages(prev => [...prev, storyQueue[0]]);
-      // You could add a setTimeout here to delay message processing
     }
   }, [storyQueue]);
 
   return (
-    <div className="story-panel max-h-32 overflow-y-auto">
+    <div className="p-4 bg-gray-900 rounded-md border border-gray-800 text-white max-h-32 overflow-y-auto">
       <div className="flex items-center gap-2 mb-2">
-        <MessageSquare className="w-5 h-5 text-neural-cyan" />
-        <h2 className="text-lg font-semibold text-neural-cyan">Story Log</h2>
+        <MessageSquare className="w-5 h-5 text-white" />
+        <h2 className="text-lg font-semibold text-white">Story Log</h2>
       </div>
       
       <div className="space-y-2">
@@ -49,7 +48,7 @@ const StoryPanel: React.FC = () => {
           return (
             <div 
               key={index}
-              className={`text-sm ${isCode ? 'code-text' : 'text-neural-light'} animate-fade-in`}
+              className={`text-sm ${isCode ? 'font-mono text-green-400' : 'text-white'} animate-fade-in`}
             >
               {message}
             </div>

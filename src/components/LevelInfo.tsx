@@ -1,8 +1,13 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { GameContext } from './GameContainer';
-import { ScanSearch, Code, Atom, LayoutGrid, AppWindow } from 'lucide-react';
+import { ScanSearch, Code, Atom, LayoutGrid, AppWindow, Info } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { 
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const levelData = [
   {
@@ -55,60 +60,69 @@ const LevelInfo: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="p-4 bg-neural-blue bg-opacity-40 rounded-md border border-neural-gray border-opacity-30">
-        <div className="flex items-center gap-2 mb-3">
-          {currentLevelData.icon}
-          <h2 className="text-lg font-semibold text-neural-cyan">
-            Level {level}: {currentLevelData.name}
-          </h2>
+      <div className="p-4 bg-gray-900 rounded-md border border-gray-700">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            {currentLevelData.icon}
+            <h2 className="text-lg font-semibold text-white">
+              Level {level}: {currentLevelData.name}
+            </h2>
+          </div>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="text-gray-400 hover:text-white">
+                <Info className="w-5 h-5" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 bg-gray-800 border-gray-700 text-white">
+              <h3 className="text-md font-semibold text-white mb-2">Current Objectives</h3>
+              <ul className="text-sm space-y-2">
+                {level === 1 && (
+                  <>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <span>Click on 0's and 1's to create neural connections</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <span>Reach 100 CP to advance to Level 2</span>
+                    </li>
+                  </>
+                )}
+                {level === 2 && (
+                  <>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <span>Form closed-loop connections</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <span>Learn how loops work by building them</span>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </PopoverContent>
+          </Popover>
         </div>
         
-        <p className="text-sm text-neural-gray mb-4">
+        <p className="text-sm text-gray-400 mb-4">
           {currentLevelData.description}
         </p>
         
         {nextLevelData && (
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-neural-light">Progress to Level {level + 1}</span>
-              <span className="text-neural-cyan">{Math.floor(progress)}%</span>
+              <span className="text-white">Progress to Level {level + 1}</span>
+              <span className="text-white">{Math.floor(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2 bg-neural-dark" />
-            <div className="text-xs text-neural-gray text-right">
+            <Progress value={progress} className="h-2 bg-gray-800" />
+            <div className="text-xs text-gray-400 text-right">
               {resources.cp}/{nextLevelData.requiredCP} CP
             </div>
           </div>
         )}
-      </div>
-      
-      <div className="p-4 bg-neural-blue bg-opacity-40 rounded-md border border-neural-gray border-opacity-30">
-        <h3 className="text-md font-semibold text-neural-cyan mb-2">Current Objectives</h3>
-        <ul className="text-sm space-y-2">
-          {level === 1 && (
-            <>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-neural-cyan" />
-                <span>Create neural connections</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-neural-cyan" />
-                <span>Reach 100 CP to advance</span>
-              </li>
-            </>
-          )}
-          {level === 2 && (
-            <>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-neural-cyan" />
-                <span>Form closed-loop connections</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-neural-cyan" />
-                <span>Purchase Loop Formation upgrade</span>
-              </li>
-            </>
-          )}
-        </ul>
       </div>
     </div>
   );

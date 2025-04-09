@@ -5,7 +5,9 @@ import ResourceDashboard from './ResourceDashboard';
 import UpgradePanel from './UpgradePanel';
 import StoryPanel from './StoryPanel';
 import LevelInfo from './LevelInfo';
+import { Settings } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 // Game context to manage global state
 export const GameContext = React.createContext<{
@@ -35,7 +37,7 @@ export const GameContext = React.createContext<{
 });
 
 const GameContainer: React.FC = () => {
-  const [resources, setResources] = useState({ cp: 0, it: 0, ne: 10 });
+  const [resources, setResources] = useState({ cp: 10, it: 0, ne: 10 });
   const [level, setLevel] = useState(1);
   const [storyQueue, setStoryQueue] = useState<string[]>([]);
   const { toast } = useToast();
@@ -76,34 +78,41 @@ const GameContainer: React.FC = () => {
         addStory
       }}
     >
-      <div className="flex flex-col w-full min-h-screen bg-neural-dark text-neural-light">
-        <header className="bg-neural-blue p-4 border-b border-neural-gray border-opacity-30">
-          <h1 className="text-2xl font-bold text-neural-cyan text-center">
-            Neural Nexus: <span className="text-neural-green">AI Ascension</span>
-          </h1>
-        </header>
+      <div className="flex flex-col w-full min-h-screen bg-black text-white">
+        {/* Resource Dashboard at the top */}
+        <ResourceDashboard />
         
-        <main className="flex flex-col md:flex-row flex-1 overflow-hidden">
-          <div className="w-full md:w-1/5 p-4 border-r border-neural-gray border-opacity-30">
+        <main className="flex flex-1 overflow-hidden">
+          {/* Level Info on the left */}
+          <div className="w-1/4 max-w-xs p-4 bg-gray-900">
             <LevelInfo />
+
+            {/* Upgrade button at bottom of sidebar */}
+            <div className="mt-4">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button className="flex items-center space-x-2 p-2 bg-gray-800 hover:bg-gray-700 rounded-md w-full">
+                    <Settings className="w-5 h-5" />
+                    <span>Upgrades</span>
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-full max-w-md bg-gray-900 border-gray-700 p-0">
+                  <UpgradePanel />
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
           
           <div className="flex flex-col flex-1">
-            <div className="p-4 border-b border-neural-gray border-opacity-30">
-              <ResourceDashboard />
-            </div>
-            
-            <div className="flex-1 p-4 flex items-center justify-center overflow-hidden">
+            {/* Neural Network takes most of the space */}
+            <div className="flex-1 p-4 flex items-center justify-center">
               <NeuralNetwork />
             </div>
             
-            <div className="p-4 border-t border-neural-gray border-opacity-30">
+            {/* Story Panel at the bottom */}
+            <div className="p-4 bg-gray-900 border-t border-gray-800">
               <StoryPanel />
             </div>
-          </div>
-          
-          <div className="w-full md:w-1/4 p-4 border-l border-neural-gray border-opacity-30">
-            <UpgradePanel />
           </div>
         </main>
       </div>
